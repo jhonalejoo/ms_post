@@ -27,9 +27,14 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/posts/**").authenticated()
-                .requestMatchers("/api/likes/**").authenticated()
-                .anyRequest().permitAll()
+                .requestMatchers(
+                    "/api/posts/**",
+                                "/api/likes/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html"
+                    ).permitAll()
+                .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
