@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.post.ms_post.entities.Post;
+import com.post.ms_post.responses.PostResponse;
 import com.post.ms_post.services.PostService;
 
 import java.util.List;
@@ -25,9 +26,25 @@ public class PostController {
     }
 
     @GetMapping("/my-posts")
-    public ResponseEntity<List<Post>> getMyPosts() {
+    public ResponseEntity<List<PostResponse>> getMyPosts() {
         Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<Post> myPosts = postService.getPostsByUser(userId);
+        List<PostResponse> myPosts = postService.getMyPostsResponse(userId);
         return ResponseEntity.ok(myPosts);
     }
+
+    @GetMapping("/other-posts")
+    public ResponseEntity<List<PostResponse>> getOtherUsersPosts() {
+        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<PostResponse> otherPosts = postService.getOtherUsersPostsResponse(userId);
+        return ResponseEntity.ok(otherPosts);
+    }
+
+    @PostMapping("/{postId}/like")
+    public ResponseEntity<String> likePost(@PathVariable Long postId) {
+    Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    postService.likePost(postId, userId);
+    return ResponseEntity.ok("Like agregado");
+}
+
+
 }

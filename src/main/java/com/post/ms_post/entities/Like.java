@@ -37,6 +37,13 @@ public class Like {
     public Long getUserId() {
         return userId;
     }
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
 
     public void setUserId(Long userId) {
         this.userId = userId;
