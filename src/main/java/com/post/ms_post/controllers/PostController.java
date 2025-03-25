@@ -8,10 +8,14 @@ import com.post.ms_post.entities.Post;
 import com.post.ms_post.responses.PostResponse;
 import com.post.ms_post.services.PostService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
+@Tag(name = "Post Controller", description = "Controlador de publicaciones")
 public class PostController {
 
     private final PostService postService;
@@ -20,11 +24,13 @@ public class PostController {
         this.postService = postService;
     }
 
+    @Operation(summary = "Crear una publicación", description = "Crea una nueva publicación")
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestBody Post post) {
         return ResponseEntity.ok(postService.createPost(post));
     }
 
+    @Operation(summary = "Obtener todas las publicaciones", description = "Obtiene todas las publicaciones")
     @GetMapping("/my-posts")
     public ResponseEntity<List<PostResponse>> getMyPosts() {
         Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -32,6 +38,7 @@ public class PostController {
         return ResponseEntity.ok(myPosts);
     }
 
+    @Operation(summary = "Obtener publicaciones de otros usuarios", description = "Obtiene las publicaciones de otros usuarios")
     @GetMapping("/other-posts")
     public ResponseEntity<List<PostResponse>> getOtherUsersPosts() {
         Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -39,6 +46,7 @@ public class PostController {
         return ResponseEntity.ok(otherPosts);
     }
 
+    @Operation(summary = "Dar like a una publicación", description = "Agrega un like a una publicación")
     @PostMapping("/{postId}/like")
     public ResponseEntity<String> likePost(@PathVariable Long postId) {
     Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
